@@ -5,6 +5,11 @@ from flask import Flask, redirect, render_template, request
 
 app = Flask(__name__)
 
+def write_to_file(filename, data):
+    """Write data to a file"""
+    with open(filename, "a") as file:
+            file.writelines(data)
+        
 
 def add_messages(username, message):
     """ Add a message to the list """
@@ -12,34 +17,31 @@ def add_messages(username, message):
     message_dict = {'timestamp': now, 'from':username, 'message':message}
     
     """Write the chat message to messages.txt"""
-    with open("data/messages.txt", "a") as chat_list:
-        chat_list.writelines("{0} - {1}: {2} \n".format(message_dict['timestamp'], message_dict['from'].title(), message_dict['message']))
+    write_to_file("data/messages.txt", "{0} - {1}: {2} \n".format(message_dict['timestamp'], message_dict['from'].title(), message_dict['message']))
     
 def get_all_messages():
     """Get all messages and separate them using a br"""
     with open("data/messages.txt", "r") as chat_list:
         messages = chat_list.readlines()
     return messages
-    
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    """Main Page with instructions"""
+    """Gets the user's name and stores it to the user.txt file"""
     if request.method == "POST":
-        with open("data/users.txt", "a") as users:
-            users.writelines(request.form["username"] + "\n")
+        write_to_file("data/users.txt", request.form["username"] + "\n" )
         return redirect(request.form["username"])
         
     return render_template('index.html')
     
 @app.route("/<username>", methods=["GET", "POST"])
 def user(username):
+    # Handle the post request
     if request.method == "POST":
         return redirect(username + "/" + request.form["message"])
-    
-    """ Display chat messages """
-    messages_string = get_all_messages()
-    return render_template('username.html', username=username, messages=messages_string)
+
+    # Handle the get request
+    return render_template('username.html', username=username, messages=get_all_messages())
     
 @app.route("/<username>/<message>")
 def send_message(username, message):
