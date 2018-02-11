@@ -26,7 +26,7 @@ def index():
 def user(username):
     """ Display chat messages """
     messages_string = get_all_messages()
-    return "<h1>Welcome {0}</h1><br> {1}".format(username, messages_string)
+    return render_template('username.html', username=username, messages=messages_string)
     
 @app.route("/<username>/<message>")
 def send_message(username, message):
