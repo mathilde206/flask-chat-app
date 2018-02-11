@@ -4,6 +4,17 @@
 <div class="container chatbox">
     <h1>Welcome {{username.title()}}</h1>
     
+    <form method="POST">
+        <div class="form-row">
+            <div class="col-12 col-md-9 mb-2 mb-md-0">
+                  <input type="message" class="form-control form-control-lg" placeholder="Type your message" name="message">
+            </div>
+            <div class="col-12 col-md-3">
+                <button type="submit" class="btn btn-block btn-lg btn-primary">Send</button>
+            </div>
+        </div>
+    </form>
+    
     <ul class="list-group list-group-flush">
         {% for message in messages %}
         <li class="list-group-item">{{message}}</li>

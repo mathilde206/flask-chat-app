@@ -10,6 +10,8 @@ def add_messages(username, message):
     """ Add a message to the list """
     now = datetime.now().strftime("%H:%M:%S")
     message_dict = {'timestamp': now, 'from':username, 'message':message}
+    
+    """Write the chat message to messages.txt"""
     with open("data/messages.txt", "a") as chat_list:
         chat_list.writelines("{0} - {1}: {2} \n".format(message_dict['timestamp'], message_dict['from'].title(), message_dict['message']))
     
@@ -30,8 +32,11 @@ def index():
         
     return render_template('index.html')
     
-@app.route("/<username>")
+@app.route("/<username>", methods=["GET", "POST"])
 def user(username):
+    if request.method == "POST":
+        return redirect(username + "/" + request.form["message"])
+    
     """ Display chat messages """
     messages_string = get_all_messages()
     return render_template('username.html', username=username, messages=messages_string)
