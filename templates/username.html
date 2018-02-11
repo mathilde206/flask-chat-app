@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container chatbox">
+    <h1>Welcome {{username.title()}}</h1>
+    
+    <ul class="list-group list-group-flush">
+        {% for message in messages %}
+        <li class="list-group-item">{{message.timestamp}} - {{ message.from.title()}}: {{message.message}}</li>
+        {% endfor %}
+    </ul>
+</div>
 
-<h1>Welcome {{username}}</h1>
-<ul>
-{% for message in messages %}
-    <li>{{message.timestamp}} - {{ message.from}}: {{message.message}}</li>
-{% endfor %}    
-</ul>
-
+<script type="text/javascript">
+    setTimeout(function(){
+        window.location.reload();
+    }, 5000)
+    
+</script>
 
 {% endblock %}

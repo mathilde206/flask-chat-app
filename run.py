@@ -22,7 +22,7 @@ def index():
     """Main Page with instructions"""
     if request.method == "POST":
         with open("data/users.txt", "a") as users:
-            users.write(request.form["username"])
+            users.writelines(request.form["username"] + "\n")
         return redirect(request.form["username"])
         
     return render_template('index.html')
